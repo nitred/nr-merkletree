@@ -1,0 +1,7 @@
+name: nr-merkletree
+channels:
+  - defaults
+dependencies:
+- python=3.6.3
+- pip:
+    - future

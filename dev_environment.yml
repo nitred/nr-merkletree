@@ -5,3 +5,4 @@ dependencies:
 - python=3.6.3
 - pip:
     - future
+    - treelib==1.5.1

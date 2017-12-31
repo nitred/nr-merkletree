@@ -18,7 +18,7 @@ def get_version():
                          version_file.read()).group('version')
 
 
-install_requires = ['future', 'treelib']
+install_requires = ['future', 'treelib==1.5.1']
 
 
 test_requires = ['pytest', 'pytest-sugar', 'pytest-cov', ]

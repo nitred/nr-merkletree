@@ -18,15 +18,15 @@ def get_version():
                          version_file.read()).group('version')
 
 
-install_requires = ['future']
+install_requires = ['future', 'treelib']
 
 
-test_requires = ['pytest', 'pytest-sugar', 'pytest-asyncio', 'pytest-cov', ]
+test_requires = ['pytest', 'pytest-sugar', 'pytest-cov', ]
 
 
 setup(
     name='nr-merkletree',
-    description="Some description about your project",
+    description="Merkle Tree implementation for Python3.",
     long_description=long_description,
     version=get_version(),
     include_package_data=True,
@@ -35,13 +35,8 @@ setup(
     tests_require=test_requires,
     packages=find_packages(),
     zip_safe=False,
-    author="nitish",
-    download_url="your project url/archive/{}.tar.gz".format(get_version()),
+    author="Nitish Reddy Koripalli <nitish.k.reddy@gmail.com>",
+    download_url="https://github.com/nitred/nr-merkletree/archive/{}.tar.gz".format(get_version()),
     classifiers=[
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6", ]
 )

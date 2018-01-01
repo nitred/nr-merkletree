@@ -11,4 +11,4 @@ merkle_tree = MerkleTree(data_chunks=data_chunks)
 
 # Print merkle_tree
 print("\n##### MERKLE TREE #####")
-pprint(merkle_tree.tree.to_dict())
+pprint(merkle_tree.to_dict())

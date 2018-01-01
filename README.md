@@ -1,15 +1,20 @@
-## nr-merkletree
+# nr-merkletree
 Python-3 compatible Merkle tree implementation.
 
+#### Current Stable Version
+```
+0.1.2
+```
 
-## Install
 
-#### Pip
+# Install
+
+### Pip
 ```
 pip install nr-merkletree
 ```
 
-#### Development Installation
+### Development Installation
 * Clone the project.
 * Install in Anaconda3 environment
 	```
@@ -19,14 +24,14 @@ pip install nr-merkletree
 	```
 
 
-## Test
+# Test
 To run the tests:
 ```
 make test
 ```
 
 
-## Usage
+# Usage
 ```python
 from nr_merkletree import MerkleTree
 from pprint import pprint
@@ -42,11 +47,11 @@ pprint(merkle_tree.tree.to_dict())
 ```
 
 
-## Examples
+# Examples
 ```
 $ python examples/simple_merkle_tree.py
 ```
 
 
-## License
+# License
 MIT

@@ -5,7 +5,7 @@ from itertools import zip_longest
 from treelib import Node, Tree
 
 
-class MerkleTree(object):
+class MerkleTree(Tree):
     """Merkle Tree. Inherits treelib.Tree class.
 
     All nodes of the tree are of type treelib.Node. The `data_chunks` are first
@@ -13,7 +13,6 @@ class MerkleTree(object):
     ID and its index is assigned as the tag.
     """
 
-    # TODO: Inherit treelib.Tree
     # TODO: Add logging
     # TODO: Hexify
     # TODO: Proof
@@ -31,9 +30,11 @@ class MerkleTree(object):
         except TypeError as e:
             raise TypeError(f"`data_chunks` argument must be an iterable instead of type {type(data_chunks)}.")
 
+        # Initialize parent treelib.Tree()
+        super().__init__()
+
         self.leaf_nodes = self.__create_leaf_nodes(data_chunks)
-        self.tree = self.__create_tree()
-        self.build_tree(self.leaf_nodes)
+        self.__build_tree(self.leaf_nodes)
 
     def hash(self, data):
         """Apply a hashing function on bytes data and return the hash.
@@ -69,10 +70,6 @@ class MerkleTree(object):
                            data=data_chunk)
                       for i, data_chunk in enumerate(data_chunks)]
         return leaf_nodes
-
-    def __create_tree(self):
-        """Create an instance of treelib.Tree and return it."""
-        return Tree()
 
     def __get_node_pair_iterator(self, nodes):
         """Return an iterator of pairs of nodes from the original nodes iterable.
@@ -119,7 +116,7 @@ class MerkleTree(object):
         print("__get_parent_node_from_node_pair: {}".format(parent_node.tag))
         return parent_node
 
-    def build_tree(self, nodes):
+    def __build_tree(self, nodes):
         """Recursively build the Merkle Tree from the leaf nodes.
 
         treelib.Tree requires that the Nodes should be added from the top-down i.e.
@@ -141,30 +138,30 @@ class MerkleTree(object):
         # If the length of the nodes is 1, then it is the root node.
         if len(nodes) == 1:
             root_node = nodes[0]
-            print("build_tree: root    : {}".format(root_node.tag))
-            self.tree.add_node(node=root_node, parent=None)
+            print("__build_tree: root    : {}".format(root_node.tag))
+            self.add_node(node=root_node, parent=None)
 
         # Else the nodes are not root, and their parent nodes need to be calculated.
         else:
-            print("build_tree: non-root: {}".format(", ".join(node.tag for node in nodes)))
+            print("__build_tree: non-root: {}".format(", ".join(node.tag for node in nodes)))
 
             # Each parent node is calculated on a pair of nodes.
             parent_nodes = [self.__get_parent_node_from_node_pair(node_a, node_b)
                             for node_a, node_b in self.__get_node_pair_iterator(nodes)]
 
-            # Recursively call the `build_tree` function again for the `parent_nodes`,
+            # Recursively call the `__build_tree` function again for the `parent_nodes`,
             # to find the parents of the `parent_nodes` and so on until the root node is
             # found. Once the root node is found, it is added to the tree. Then its children
             # are added to the tree and so on until the `parent_nodes` are added to the tree.
             # NOTE: TL-DR; Once this function returns, we can assume that the `parent_nodes`
             # have been added to the tree.
-            self.build_tree(parent_nodes)
+            self.__build_tree(parent_nodes)
 
             # NOTE: Explicitly add the children of the `parent_nodes` to the tree.
             for parent_node, (node_a, node_b) in zip(parent_nodes, self.__get_node_pair_iterator(nodes)):
                 # Add node_a as a child of parent_node
-                self.tree.add_node(node=node_a, parent=parent_node)
+                self.add_node(node=node_a, parent=parent_node)
 
                 # Add node_b as a child of parent_node, if not None. It is None if `len(nodes)` is odd.
                 if node_b is not None:
-                    self.tree.add_node(node=node_b, parent=parent_node)
+                    self.add_node(node=node_b, parent=parent_node)

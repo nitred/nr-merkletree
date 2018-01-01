@@ -7,7 +7,7 @@ from setuptools import find_packages, setup
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the relevant file
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 
@@ -35,8 +35,11 @@ setup(
     tests_require=test_requires,
     packages=find_packages(),
     zip_safe=False,
-    author="Nitish Reddy Koripalli <nitish.k.reddy@gmail.com>",
+    author="Nitish Reddy Koripalli",
+    author_email="nitish.k.reddy@gmail.com",
+    url='https://github.com/nitred/nr-merkletree',
     download_url="https://github.com/nitred/nr-merkletree/archive/{}.tar.gz".format(get_version()),
     classifiers=[
-        "Programming Language :: Python :: 3.6", ]
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6"]
 )

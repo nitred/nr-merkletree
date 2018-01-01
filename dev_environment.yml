@@ -6,3 +6,5 @@ dependencies:
 - pip:
     - future
     - treelib==1.5.1
+    - m2r==0.1.12
+    - twine==1.9.1

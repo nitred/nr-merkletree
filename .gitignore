@@ -1,3 +1,6 @@
+# Ignoring Generated .rst file
+README.rst
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

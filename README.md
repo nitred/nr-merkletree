@@ -3,7 +3,7 @@ Python-3 compatible Merkle tree implementation.
 
 #### Current Stable Version
 ```
-0.1.2
+0.1.3
 ```
 
 

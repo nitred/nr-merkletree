@@ -1,4 +1,6 @@
 # nr-merkletree
+[![Build Status](https://travis-ci.org/nitred/nr-merkletree.svg?branch=master)](https://travis-ci.org/nitred/nr-merkletree)
+
 Python-3 compatible Merkle tree implementation.
 
 #### Current Stable Version

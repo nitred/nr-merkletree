@@ -38,5 +38,6 @@ setup(
     author="Nitish Reddy Koripalli <nitish.k.reddy@gmail.com>",
     download_url="https://github.com/nitred/nr-merkletree/archive/{}.tar.gz".format(get_version()),
     classifiers=[
+        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6", ]
 )

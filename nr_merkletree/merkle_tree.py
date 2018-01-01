@@ -28,7 +28,7 @@ class MerkleTree(Tree):
         try:
             iter(data_chunks)
         except TypeError as e:
-            raise TypeError(f"`data_chunks` argument must be an iterable instead of type {type(data_chunks)}.")
+            raise TypeError("`data_chunks` argument must be an iterable instead of type {}.".format(type(data_chunks)))
 
         # Initialize parent treelib.Tree()
         super().__init__()
@@ -47,7 +47,7 @@ class MerkleTree(Tree):
         """
         # Validation.
         if not isinstance(data, bytes):
-            raise TypeError(f"`data` argument must be of type `bytes` instead of type {type(data)}.")
+            raise TypeError("`data` argument must be of type `bytes` instead of type {}.".format(type(data)))
 
         # TODO: Lookup what the best hash functions are. Currently using sha256.
         return hashlib.sha256(data).digest()

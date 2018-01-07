@@ -3,6 +3,7 @@ import hashlib
 from itertools import zip_longest
 
 from treelib import Node, Tree
+from treelib.exceptions import NodeIDAbsentError
 
 
 class MerkleTree(Tree):
@@ -165,3 +166,123 @@ class MerkleTree(Tree):
                 # Add node_b as a child of parent_node, if not None. It is None if `len(nodes)` is odd.
                 if node_b is not None:
                     self.add_node(node=node_b, parent=parent_node)
+
+    def __get_children_pair_nodes_from_parent(self, parent_node):
+        """Return a pair of children of parent node.
+
+        * Return child_a, child_b if both exist.
+        * Return child_a, None    if one exists.
+        * Raise error for other cases.
+        """
+        child_nodes = self.children(parent_node.identifier)
+
+        if len(child_nodes) == 2:
+            return child_nodes[0], child_nodes[1]
+        elif len(child_nodes) == 1:
+            return child_nodes[0], None
+        else:
+            raise Exception("Parent with incorrect number of children.")
+
+    def __verify_node_children_hashes(self, node):
+        """Verify that the node identifier is the hash of children identifiers."""
+        node_a, node_b = self.__get_children_pair_nodes_from_parent(node)
+
+        # If parent has two children.
+        if node_b is not None:
+            if self.hash(node_a.identifier + node_b.identifier) == node.identifier:
+                return True
+            else:
+                return False
+        # If parent has only one child.
+        else:
+            if self.hash(node_a.identifier) == node.identifier:
+                return True
+            else:
+                return False
+
+    def __verify_node_parent_pointers(self, node):
+        """Verify if the node is the child of its parent.
+
+        * Check if the node has a parent.
+        * Check if the node is a child of the parent.
+        """
+        # Check if node has a parent.
+        try:
+            parent_node = self.parent(node.identifier)
+        except NodeIDAbsentError as ex:
+            return False
+
+        # Check if node is a child of parent_node.
+        node_a, node_b = self.__get_children_pair_nodes_from_parent(parent_node)
+
+        if node_a.identifier == node.identifier:
+            return True
+        elif (node_b is not None) and (node_b.identifier == node.identifier):
+            return True
+        else:
+            return False
+
+    def __prove_node_membership_recursively(self, node):
+        """Recursively prove if the node belongs to the merkle tree.
+
+        To prove a node's membership, the following checks are done:
+            * If the node's children have the right hashes.
+            * If the node is the child of its parent (by checking pointers).
+            * Recursively prove the node's parent's membership.
+
+        Args:
+            node (treelib.Node): The node which needs its membership proven.
+
+        Returns:
+            bool (proof of membership): Whether the node is a member or not.
+        """
+        # If root, only verify children.
+        if node.is_root():
+            return self.__verify_node_children_hashes(node)
+
+        # If lead, only verify parent.
+        elif node.is_leaf():
+            if not self.__verify_node_parent_pointers(node):
+                return False
+
+            # Recursive parent call.
+            parent = self.parent(nid=node.identifier)
+            return self.__prove_node_membership_recursively(parent)
+
+        # If regular node, verify children and then parents.
+        else:
+            if not self.__verify_node_children_hashes(node):
+                return False
+
+            if not self.__verify_node_parent_pointers(node):
+                return False
+
+            # Recursive parent call.
+            parent = self.parent(nid=node.identifier)
+            return self.__prove_node_membership_recursively(parent)
+
+    def prove_membership(self, data_chunk):
+        """Prove whether a data_chunk is a member of this Merkle Tree.
+
+        The following checks are done to prove membership:
+            * check if data_chunk exists in tree.
+            * check if data_chunk_node is a leaf node.
+            * Recursively check parent nodes.
+        """
+        nid = self.hash(data_chunk)
+
+        # check if node exists in tree.
+        node = self.get_node(nid)
+        if node is None:
+            return False
+
+        # check if node is a leaf node.
+        if not node.is_leaf():
+            return False
+
+        # prove node membership.
+        if not self.__prove_node_membership_recursively(node):
+            return False
+
+        # If all checks pass, return True.
+        return True
